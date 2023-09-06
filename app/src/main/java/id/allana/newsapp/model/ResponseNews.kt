@@ -65,5 +65,8 @@ data class News(
 	val placeId: Any,
 
 	@field:SerializedName("updatedAt")
-	val updatedAt: String
+	val updatedAt: String,
+
+	@field:SerializedName("views")
+	val views: Int
 )

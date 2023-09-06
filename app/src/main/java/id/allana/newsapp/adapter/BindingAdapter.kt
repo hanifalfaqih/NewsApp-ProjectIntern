@@ -4,7 +4,6 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
-import id.allana.newsapp.R
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -28,8 +27,8 @@ class BindingAdapter {
         @JvmStatic
         @BindingAdapter("app:loadImageWithGlide")
         fun loadImageWithGlide(image: ShapeableImageView, url: String) {
-            if (url.isNullOrEmpty()) {
-                image.setImageResource(R.drawable.ic_placeholder_loading)
+            if (url.isEmpty()) {
+//                image.setImageResource(R.drawable.ic_placeholder_loading)
                 return
             }
             Glide.with(image)

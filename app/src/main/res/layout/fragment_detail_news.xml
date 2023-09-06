@@ -37,7 +37,6 @@
                         android:layout_height="@dimen/_250sdp"
                         android:scaleType="centerCrop"
                         app:layout_collapseMode="parallax"
-                        app:layout_collapseParallaxMultiplier="0.75"
                         />
 
                     <com.google.android.material.appbar.MaterialToolbar
@@ -85,8 +84,9 @@
                             android:text="@{news.newsCategory.title}"
                             android:id="@+id/tv_category_news"
                             style="@style/medium8"
+                            tools:text="Kategori"
                             android:layout_gravity="center"
-                            tools:text="Kategori"/>
+                            android:alpha="0.5"/>
 
                         <!-- Tanggal -->
                         <com.google.android.material.textview.MaterialTextView
@@ -96,7 +96,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             tools:text="Tanggal Berita"
-                            android:layout_margin="@dimen/_8sdp"/>
+                            android:layout_margin="@dimen/_8sdp"
+                            android:alpha="0.5"/>
 
                         <!-- Konten -->
                         <com.google.android.material.textview.MaterialTextView

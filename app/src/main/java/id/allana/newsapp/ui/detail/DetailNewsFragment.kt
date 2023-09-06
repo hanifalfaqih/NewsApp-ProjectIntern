@@ -62,7 +62,7 @@ class DetailNewsFragment : BaseFragment<FragmentDetailNewsBinding>(
         newsDetailViewModel.newsDetailData.observe(viewLifecycleOwner) { newsDetail ->
             Glide.with(this)
                 .load("$BASE_URL_PHOTO${newsDetail?.data?.thumb}")
-                .placeholder(R.drawable.ic_placeholder_loading)
+//                .placeholder(R.drawable.ic_placeholder_loading)
                 .into(getViewBinding().sivNews)
             getViewBinding().news = newsDetail?.data
         }

@@ -2,10 +2,17 @@ package id.allana.newsapp.ui.list
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialElevationScale
@@ -19,7 +26,7 @@ import id.allana.newsapp.viewmodel.NewsViewModel
 
 class ListNewsFragment : BaseFragment<FragmentListNewsBinding>(
     FragmentListNewsBinding::inflate
-) {
+), SearchView.OnQueryTextListener {
 
     private val newsViewModel: NewsViewModel by viewModels()
     private val newsAdapter: NewsAdapter by lazy {
@@ -38,6 +45,26 @@ class ListNewsFragment : BaseFragment<FragmentListNewsBinding>(
         reenterTransition = MaterialElevationScale(true).apply {
             duration = 300.toLong()
         }
+
+        initMenu()
+    }
+
+    private fun initMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object: MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.search_menu, menu)
+
+                val searchMenu = menu.findItem(R.id.action_search)
+                val searchView = searchMenu.actionView as SearchView
+                searchView.isSubmitButtonEnabled = true
+                searchView.setOnQueryTextListener(this@ListNewsFragment)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return true
+            }
+
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun initToolbar() {
@@ -78,5 +105,13 @@ class ListNewsFragment : BaseFragment<FragmentListNewsBinding>(
     private fun setResultData(data: List<News?>?) {
         Log.d(ListNewsFragment::class.java.simpleName, data.toString())
         newsAdapter.submitList(data)
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        return true
     }
 }
