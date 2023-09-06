@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">NewsApp</string>
+
+    <!-- FOR MOTION MATERIAL -->
+    <string name="news_card_transition_name">news_card_%1$s</string>
+    <string name="news_card_detail_transition_name">news_card_detail</string>
+
+
+</resources>
