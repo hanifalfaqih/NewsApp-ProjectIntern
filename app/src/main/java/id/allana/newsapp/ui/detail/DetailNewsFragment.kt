@@ -3,7 +3,6 @@ package id.allana.newsapp.ui.detail
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -39,8 +38,16 @@ class DetailNewsFragment : BaseFragment<FragmentDetailNewsBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as AppCompatActivity).setSupportActionBar(getViewBinding().detailToolbar)
+    }
+
+    override fun initToolbar() {
+        val toolbar = getViewBinding().toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     override fun initView() {

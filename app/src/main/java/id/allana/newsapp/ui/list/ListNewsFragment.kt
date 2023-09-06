@@ -28,10 +28,6 @@ class ListNewsFragment : BaseFragment<FragmentListNewsBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val toolbar = getViewBinding().toolbar
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.setIcon(R.drawable.icon_news)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
 
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
@@ -42,6 +38,13 @@ class ListNewsFragment : BaseFragment<FragmentListNewsBinding>(
         reenterTransition = MaterialElevationScale(true).apply {
             duration = 300.toLong()
         }
+    }
+
+    override fun initToolbar() {
+        val toolbar = getViewBinding().toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setIcon(R.drawable.icon_news)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     override fun initView() {

@@ -25,10 +25,12 @@ abstract class BaseFragment<B: ViewBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initToolbar()
         initView()
         observeData()
     }
 
+    abstract fun initToolbar()
     abstract fun initView()
 
     abstract fun observeData()
