@@ -1,6 +1,5 @@
 package id.allana.newsapp.ui.detail
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -8,8 +7,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.google.android.material.transition.MaterialContainerTransform
-import id.allana.newsapp.R
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.transition.MaterialSharedAxis
 import id.allana.newsapp.adapter.BindingAdapter.Companion.BASE_URL_PHOTO
 import id.allana.newsapp.base.BaseFragment
 import id.allana.newsapp.databinding.FragmentDetailNewsBinding
@@ -29,15 +28,13 @@ class DetailNewsFragment : BaseFragment<FragmentDetailNewsBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedElementEnterTransition = MaterialContainerTransform().apply {
-            drawingViewId = R.id.nav_host_news_container
-            duration = 300.toLong()
-            scrimColor = Color.TRANSPARENT
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true).apply {
+            this.duration = 500L
         }
-    }
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false).apply {
+            this.duration = 500L
+        }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun initToolbar() {
@@ -59,10 +56,39 @@ class DetailNewsFragment : BaseFragment<FragmentDetailNewsBinding>(
     }
 
     private fun observeDetailNews() {
+        newsDetailViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                /**
+                 * FOR IMAGE
+                 */
+                getViewBinding().sivNews.visibility = View.GONE
+                getViewBinding().loadingImageNews.visibility = View.VISIBLE
+
+                /**
+                 * FOR CONTENT
+                 */
+                getViewBinding().pbNews.visibility = View.VISIBLE
+                getViewBinding().containerContentNews.visibility = View.GONE
+            } else {
+                /**
+                 * FOR IMAGE
+                 */
+                getViewBinding().sivNews.visibility = View.VISIBLE
+                getViewBinding().loadingImageNews.visibility = View.GONE
+
+                /**
+                 * FOR CONTENT
+                 */
+                getViewBinding().pbNews.visibility = View.GONE
+                getViewBinding().containerContentNews.visibility = View.VISIBLE
+            }
+        }
+        newsDetailViewModel.isError.observe(viewLifecycleOwner) { isError ->
+            if (isError) Snackbar.make(requireView(), newsDetailViewModel.errorMessage, Snackbar.LENGTH_SHORT).show()
+        }
         newsDetailViewModel.newsDetailData.observe(viewLifecycleOwner) { newsDetail ->
             Glide.with(this)
                 .load("$BASE_URL_PHOTO${newsDetail?.data?.thumb}")
-//                .placeholder(R.drawable.ic_placeholder_loading)
                 .into(getViewBinding().sivNews)
             getViewBinding().news = newsDetail?.data
         }

@@ -3,14 +3,13 @@ package id.allana.newsapp.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import id.allana.newsapp.model.ResponseNews
 import id.allana.newsapp.network.ApiConfig
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.StringBuilder
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class NewsViewModel: ViewModel() {
 
@@ -30,24 +29,26 @@ class NewsViewModel: ViewModel() {
         _isLoading.value = true
         _isError.value = false
 
-        val client = ApiConfig.getApiService().getAllNews()
-        client.enqueue(object: Callback<ResponseNews> {
-            override fun onResponse(call: Call<ResponseNews>, response: Response<ResponseNews>) {
-                val responseBody = response.body()
-                if (!response.isSuccessful || responseBody == null) {
-                    onError("Error processing data!")
-                    return
+        viewModelScope.launch {
+            val client = ApiConfig.getApiService().getAllNews()
+            client.enqueue(object: Callback<ResponseNews> {
+                override fun onResponse(call: Call<ResponseNews>, response: Response<ResponseNews>) {
+                    val responseBody = response.body()
+                    if (!response.isSuccessful || responseBody == null) {
+                        onError("Error processing data!")
+                        return
+                    }
+
+                    _isLoading.value = false
+                    _newsData.postValue(responseBody)
                 }
 
-                _isLoading.value = false
-                _newsData.postValue(responseBody)
-            }
-
-            override fun onFailure(call: Call<ResponseNews>, t: Throwable) {
-                onError(t.message)
-                t.printStackTrace()
-            }
-        })
+                override fun onFailure(call: Call<ResponseNews>, t: Throwable) {
+                    onError(t.message)
+                    t.printStackTrace()
+                }
+            })
+        }
     }
 
     private fun onError(inputMessage: String?) {
@@ -57,7 +58,7 @@ class NewsViewModel: ViewModel() {
         errorMessage = StringBuilder("ERROR: ")
             .append("$message some data may not displayed properly").toString()
 
-        _isError.value = true
         _isLoading.value = false
+        _isError.value = true
     }
 }

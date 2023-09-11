@@ -3,12 +3,13 @@ package id.allana.newsapp.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import id.allana.newsapp.model.ResponseDetailNews
 import id.allana.newsapp.network.ApiConfig
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.StringBuilder
 
 class NewsDetailViewModel: ViewModel() {
 
@@ -28,28 +29,29 @@ class NewsDetailViewModel: ViewModel() {
         _isLoading.value = true
         _isError.value = false
 
-        val client = ApiConfig.getApiService().getDetailNews(id)
-        client.enqueue(object: Callback<ResponseDetailNews> {
-            override fun onResponse(
-                call: Call<ResponseDetailNews>,
-                response: Response<ResponseDetailNews>
-            ) {
-                val responseBody = response.body()
-                if (!response.isSuccessful || responseBody == null) {
-                    onError("Error processing data!")
-                    return
+        viewModelScope.launch {
+            val client = ApiConfig.getApiService().getDetailNews(id)
+            client.enqueue(object: Callback<ResponseDetailNews> {
+                override fun onResponse(
+                    call: Call<ResponseDetailNews>,
+                    response: Response<ResponseDetailNews>
+                ) {
+                    val responseBody = response.body()
+                    if (!response.isSuccessful || responseBody == null) {
+                        onError("Error processing data!")
+                        return
+                    }
+
+                    _isLoading.value = false
+                    _newsDetailData.postValue(responseBody)
                 }
 
-                _isLoading.value = false
-                _newsDetailData.postValue(responseBody)
-            }
-
-            override fun onFailure(call: Call<ResponseDetailNews>, t: Throwable) {
-                onError(t.message)
-                t.printStackTrace()
-            }
-
-        })
+                override fun onFailure(call: Call<ResponseDetailNews>, t: Throwable) {
+                    onError(t.message)
+                    t.printStackTrace()
+                }
+            })
+        }
     }
 
     private fun onError(inputMessage: String?) {

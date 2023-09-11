@@ -10,7 +10,6 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        android:transitionName="@{@string/news_card_transition_name(news.id)}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
