@@ -3,8 +3,6 @@ package id.allana.newsapp.ui.list
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +18,7 @@ import id.allana.newsapp.viewmodel.NewsViewModel
 
 class ListNewsFragment : BaseFragment<FragmentListNewsBinding>(
     FragmentListNewsBinding::inflate
-), SearchView.OnQueryTextListener {
+) {
 
     private val newsViewModel: NewsViewModel by viewModels()
     private val newsAdapter: NewsAdapter by lazy {
@@ -118,14 +116,5 @@ class ListNewsFragment : BaseFragment<FragmentListNewsBinding>(
     private fun setResultSearchData(data: List<News?>?) {
         Log.d(ListNewsFragment::class.java.simpleName, "RESULT SEARCH NEWS -> ${data.toString()}")
         newsSearchAdapter.submitList(data)
-    }
-
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        Toast.makeText(requireContext(), query, Toast.LENGTH_SHORT).show()
-        return true
-    }
-
-    override fun onQueryTextChange(newText: String?): Boolean {
-        return true
     }
 }
