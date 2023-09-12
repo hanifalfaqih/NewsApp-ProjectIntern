@@ -2,27 +2,37 @@ package id.allana.newsapp.ui.detail
 
 import android.os.Bundle
 import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
-import id.allana.newsapp.adapter.BindingAdapter.Companion.BASE_URL_PHOTO
 import id.allana.newsapp.base.BaseFragment
 import id.allana.newsapp.databinding.FragmentDetailNewsBinding
-import id.allana.newsapp.viewmodel.NewsDetailViewModel
+import id.allana.newsapp.util.textFormatTime
 
 
 class DetailNewsFragment : BaseFragment<FragmentDetailNewsBinding>(
     FragmentDetailNewsBinding::inflate
 ) {
 
-    private val newsDetailViewModel: NewsDetailViewModel by viewModels()
     private val args: DetailNewsFragmentArgs by navArgs()
-    private val newsId: String by lazy {
-        args.newsId.toString()
+    private val newsTitle: String by lazy {
+        args.newsTitle.toString()
+    }
+    private val newsImageUrl: String by lazy {
+        args.newsImageUrl.toString()
+    }
+    private val newsPublishedAt: String by lazy {
+        args.newsPublishedAt.toString()
+    }
+    private val newsSource: String by lazy {
+        args.newsSource.toString()
+    }
+    private val newsUrl: String by lazy {
+        args.newsUrl.toString()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,50 +58,33 @@ class DetailNewsFragment : BaseFragment<FragmentDetailNewsBinding>(
     }
 
     override fun initView() {
-        newsDetailViewModel.getDetailNews(newsId)
+        setDataToView()
     }
 
-    override fun observeData() {
-        observeDetailNews()
-    }
+    private fun setDataToView() {
+        getViewBinding().apply {
+            tvTitleNews.text = newsTitle
+            tvSourceNews.text = newsSource
+            tvDateNews.text = textFormatTime(newsPublishedAt)
 
-    private fun observeDetailNews() {
-        newsDetailViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            if (isLoading) {
-                /**
-                 * FOR IMAGE
-                 */
-                getViewBinding().sivNews.visibility = View.GONE
-                getViewBinding().loadingImageNews.visibility = View.VISIBLE
+            Glide.with(requireContext())
+                .load(newsImageUrl)
+                .into(sivNews)
 
-                /**
-                 * FOR CONTENT
-                 */
-                getViewBinding().pbNews.visibility = View.VISIBLE
-                getViewBinding().containerContentNews.visibility = View.GONE
-            } else {
-                /**
-                 * FOR IMAGE
-                 */
-                getViewBinding().sivNews.visibility = View.VISIBLE
-                getViewBinding().loadingImageNews.visibility = View.GONE
-
-                /**
-                 * FOR CONTENT
-                 */
-                getViewBinding().pbNews.visibility = View.GONE
-                getViewBinding().containerContentNews.visibility = View.VISIBLE
+            webViewArticle.apply {
+                settings.javaScriptEnabled
+                webViewClient = object: WebViewClient() {
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                        getViewBinding().pbLoadingNews.visibility = View.GONE
+                        getViewBinding().webViewArticle.visibility = View.VISIBLE
+                    }
+                }
+                loadUrl(newsUrl)
             }
         }
-        newsDetailViewModel.isError.observe(viewLifecycleOwner) { isError ->
-            if (isError) Snackbar.make(requireView(), newsDetailViewModel.errorMessage, Snackbar.LENGTH_SHORT).show()
-        }
-        newsDetailViewModel.newsDetailData.observe(viewLifecycleOwner) { newsDetail ->
-            Glide.with(this)
-                .load("$BASE_URL_PHOTO${newsDetail?.data?.thumb}")
-                .into(getViewBinding().sivNews)
-            getViewBinding().news = newsDetail?.data
-        }
     }
+
+    override fun observeData() {}
 
 }

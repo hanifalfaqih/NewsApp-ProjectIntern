@@ -18,7 +18,23 @@
         android:name="id.allana.newsapp.ui.detail.DetailNewsFragment"
         tools:layout="@layout/fragment_detail_news">
         <argument
-            android:name="newsId"
+            android:name="newsTitle"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="newsImageUrl"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="newsPublishedAt"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="newsSource"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="newsUrl"
             app:argType="string"
             app:nullable="true" />
     </fragment>

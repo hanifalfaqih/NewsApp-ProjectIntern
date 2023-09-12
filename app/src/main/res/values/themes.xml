@@ -185,7 +185,7 @@
     </style>
 
     <style name="title14">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/dark</item>
         <item name="android:textStyle">bold</item>
@@ -204,7 +204,7 @@
     </style>
 
     <style name="title10">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/dark</item>
         <item name="android:textStyle">bold</item>

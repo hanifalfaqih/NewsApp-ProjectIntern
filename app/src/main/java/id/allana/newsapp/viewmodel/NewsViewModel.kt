@@ -33,7 +33,7 @@ class NewsViewModel: ViewModel() {
         _isError.value = false
 
         viewModelScope.launch {
-            val client = ApiConfig.getApiService().getAllNews()
+            val client = ApiConfig.getApiService().getTopHeadlineNewsFromID()
             client.enqueue(object: Callback<ResponseNews> {
                 override fun onResponse(call: Call<ResponseNews>, response: Response<ResponseNews>) {
                     val responseBody = response.body()
@@ -59,7 +59,7 @@ class NewsViewModel: ViewModel() {
         _isError.value = false
 
         viewModelScope.launch {
-            val client = ApiConfig.getApiService().searchNews(query)
+            val client = ApiConfig.getApiService().getSearchNews(query)
             client.enqueue(object: Callback<ResponseNews> {
                 override fun onResponse(
                     call: Call<ResponseNews>,

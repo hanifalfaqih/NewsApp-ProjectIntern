@@ -1,33 +1,32 @@
 package id.allana.newsapp.network
 
-import id.allana.newsapp.model.ResponseDetailNews
 import id.allana.newsapp.model.ResponseNews
+import id.allana.newsapp.network.ApiConfig.Companion.API_KEY
+import id.allana.newsapp.network.ApiConfig.Companion.COUNTRY_CODE
+import id.allana.newsapp.network.ApiConfig.Companion.POPULARITY
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
 
     /**
-     * GET ALL NEWS
+     * GET TOP HEADLINE NEWS - ID
      */
-    @GET("news")
-    fun getAllNews(): Call<ResponseNews>
-
-    /**
-     * GET DETAIL NEWS
-     */
-    @GET("news/{id}")
-    fun getDetailNews(
-        @Path("id") id: String
-    ): Call<ResponseDetailNews>
+    @GET("top-headlines")
+    fun getTopHeadlineNewsFromID(
+        @Query("country") country: String = COUNTRY_CODE,
+        @Query("apiKey") apiKey: String = API_KEY
+    ): Call<ResponseNews>
 
     /**
      * SEARCH NEWS
      */
-    @GET("news/")
-    fun searchNews(
-        @Query("query") query: String
+    @GET("everything")
+    fun getSearchNews(
+        @Query("q") query: String,
+        @Query("sortBy") sortBy: String = POPULARITY,
+        @Query("apiKey") apiKey: String = API_KEY
     ): Call<ResponseNews>
+
 }

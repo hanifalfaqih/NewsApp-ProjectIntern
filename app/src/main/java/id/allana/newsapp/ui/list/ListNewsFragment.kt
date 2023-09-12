@@ -12,7 +12,7 @@ import id.allana.newsapp.adapter.NewsAdapter
 import id.allana.newsapp.adapter.NewsSearchAdapter
 import id.allana.newsapp.base.BaseFragment
 import id.allana.newsapp.databinding.FragmentListNewsBinding
-import id.allana.newsapp.model.News
+import id.allana.newsapp.model.ArticlesItem
 import id.allana.newsapp.viewmodel.NewsViewModel
 
 
@@ -90,7 +90,7 @@ class ListNewsFragment : BaseFragment<FragmentListNewsBinding>(
             }
         }
         newsViewModel.newsData.observe(viewLifecycleOwner) { allNews ->
-            setResultData(allNews?.data)
+            setResultData(allNews?.articles)
         }
 
 
@@ -104,16 +104,16 @@ class ListNewsFragment : BaseFragment<FragmentListNewsBinding>(
             }
         }
         newsViewModel.newsSearchData.observe(viewLifecycleOwner) { allSearchNews ->
-            setResultSearchData(allSearchNews?.data)
+            setResultSearchData(allSearchNews?.articles)
         }
     }
 
-    private fun setResultData(data: List<News?>?) {
+    private fun setResultData(data: List<ArticlesItem?>?) {
         Log.d(ListNewsFragment::class.java.simpleName, "RESULT LIST NEWS -> ${data.toString()}")
         newsAdapter.submitList(data)
     }
 
-    private fun setResultSearchData(data: List<News?>?) {
+    private fun setResultSearchData(data: List<ArticlesItem?>?) {
         Log.d(ListNewsFragment::class.java.simpleName, "RESULT SEARCH NEWS -> ${data.toString()}")
         newsSearchAdapter.submitList(data)
     }

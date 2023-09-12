@@ -6,7 +6,7 @@
     <data>
         <variable
             name="news"
-            type="id.allana.newsapp.model.News" />
+            type="id.allana.newsapp.model.ArticlesItem" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -17,7 +17,6 @@
         android:layout_marginEnd="@dimen/_8sdp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            app:loadImageWithGlide="@{news.thumb}"
             android:id="@+id/siv_news"
             style="@style/bigShapeImage"
             android:layout_width="match_parent"
@@ -47,25 +46,29 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_title_news"
                     style="@style/title14"
-                    android:textColor="@color/white"
-                    android:text="@{news.title}"
-                    android:layout_marginStart="@dimen/_16sdp"
-                    android:layout_marginBottom="@dimen/_4sdp"
                     android:layout_marginTop="@dimen/_8sdp"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginBottom="@dimen/_4sdp"
+                    android:text="@{news.title}"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginEnd="@dimen/_16sdp"
                     app:layout_constraintBottom_toTopOf="@+id/tv_date_news"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="Test Content" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    app:textFormatTime="@{news.createdAt}"
                     android:id="@+id/tv_date_news"
                     style="@style/title10"
-                    android:textColor="@color/white"
-                    android:layout_marginStart="@dimen/_16sdp"
                     android:layout_marginBottom="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginEnd="@dimen/_16sdp"
+                    android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:textFormatTime="@{news.publishedAt}"
                     tools:text="Date News" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
