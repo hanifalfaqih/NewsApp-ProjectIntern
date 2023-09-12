@@ -31,12 +31,28 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.search.SearchView
+            android:id="@+id/search_view_news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/search"
             app:layout_anchor="@id/search_bar">
 
             <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/loading_image_search_news"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_125sdp"
+                android:layout_gravity="center"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/ic_loading_news" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_search_news"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:listitem="@layout/item_news_layout" />
 
         </com.google.android.material.search.SearchView>
 

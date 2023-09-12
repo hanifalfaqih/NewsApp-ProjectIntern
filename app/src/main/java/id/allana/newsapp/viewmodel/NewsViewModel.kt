@@ -16,6 +16,9 @@ class NewsViewModel: ViewModel() {
     private val _newsData = MutableLiveData<ResponseNews?>()
     val newsData: LiveData<ResponseNews?> get() = _newsData
 
+    private val _newsSearchData = MutableLiveData<ResponseNews?>()
+    val newsSearchData: LiveData<ResponseNews?> get() = _newsSearchData
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
@@ -41,6 +44,35 @@ class NewsViewModel: ViewModel() {
 
                     _isLoading.value = false
                     _newsData.postValue(responseBody)
+                }
+
+                override fun onFailure(call: Call<ResponseNews>, t: Throwable) {
+                    onError(t.message)
+                    t.printStackTrace()
+                }
+            })
+        }
+    }
+
+    fun searchNews(query: String) {
+        _isLoading.value = true
+        _isError.value = false
+
+        viewModelScope.launch {
+            val client = ApiConfig.getApiService().searchNews(query)
+            client.enqueue(object: Callback<ResponseNews> {
+                override fun onResponse(
+                    call: Call<ResponseNews>,
+                    response: Response<ResponseNews>
+                ) {
+                    val responseBody = response.body()
+                    if (!response.isSuccessful || responseBody == null) {
+                        onError("Error processing data!")
+                        return
+                    }
+
+                    _isLoading.value = false
+                    _newsSearchData.postValue(responseBody)
                 }
 
                 override fun onFailure(call: Call<ResponseNews>, t: Throwable) {
