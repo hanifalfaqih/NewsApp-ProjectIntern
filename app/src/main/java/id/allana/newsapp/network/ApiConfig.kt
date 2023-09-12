@@ -34,7 +34,7 @@ class ApiConfig {
          }
 
          private const val BASE_URL = "https://newsapi.org/v2/"
-         const val API_KEY = "8d467b4b6d414e739276a750786896ac"
+         const val API_KEY = "REPLACE WITH YOUR OWN"
          const val COUNTRY_CODE = "us"
          const val POPULARITY = "popularity"
      }
